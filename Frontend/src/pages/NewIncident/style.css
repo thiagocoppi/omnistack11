@@ -46,6 +46,11 @@
    margin-top: 8px;
 }
 
+.new-incident-container .content form textarea::placeholder {  
+    padding-left: 19px;
+    padding-top: 8px;
+ }
+
 .new-incident-container .content form .input-group {
     display: flex;
 }

@@ -1,10 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import logoImg from '../../assets/logo.svg';
+import api from '../../services/api';
+
+
 
 export default function NewIncident() {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [whatsapp, setWhatsapp] = useState('');
+    const [value, setValue] = useState(0);
+
+    const ongId = localStorage.getItem('ongId');
+    const history = useHistory();
+
+
+
+    async function handleNewIncident(e) {
+        e.preventDefault();
+        const data = {
+            title,
+            description,
+            whatsapp,
+            value
+        };
+
+        await api.post('incidents', data, {
+            headers : {
+                Authorization: ongId
+            }
+        });
+
+        history.push('/profile');
+    }
+
     return (
         <div className="new-incident-container">
             <div className="content">
@@ -17,11 +48,27 @@ export default function NewIncident() {
                         Voltar para home 
                     </Link>
                 </section>
-                <form>
-                    <input placeholder="Título do caso"/>
-                    <textarea placeholder="Descrição"/>
-                    <input placeholder="WhatsApp"/>
-                    <input placeholder="Valor em reais"/>
+                <form onSubmit={handleNewIncident}>
+                    <input 
+                        placeholder="Título do caso"
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                    />
+                    <textarea 
+                        placeholder="Descrição"
+                        onChange={e => setDescription(e.target.value)}
+                        value={description}
+                    />
+                    <input 
+                        placeholder="WhatsApp"
+                        onChange={e => setWhatsapp(e.target.value)}
+                        value={whatsapp}
+                    />
+                    <input 
+                        placeholder="Valor em reais"
+                        onChange={e => setValue(e.target.value)}
+                        value={value}
+                    />
                     <button className="button" type="submit">
                         Cadastrar
                     </button>
